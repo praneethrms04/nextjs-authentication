@@ -1,9 +1,14 @@
 "use client";
+import { useAddUserMutation } from "@/redux/features/authSlice";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import { data } from "autoprefixer";
 import Link from "next/link";
 import React, { useState } from "react";
+import ErrorMessage from "../components/ErrorMessage";
+
+
 
 const SignUp = () => {
-
 
   const [user, setuser] = useState({
     username: '',
@@ -11,12 +16,34 @@ const SignUp = () => {
     password: ''
   })
 
-  const onRegisterhandler = (e: any) => {
+  const [adduser, { error, isLoading, isSuccess, isError, data }] = useAddUserMutation()
+
+
+  const onRegisterhandler = async (e: any) => {
     e.preventDefault()
-    console.log(user)
+    const userData = JSON.stringify(user)
+
+    console.log(isLoading) //true
+    console.log(isSuccess) // false
+    console.log(isError) // false
+    console.log(data)
+    return await adduser(userData)
   }
+
+
+
+
   return (
     <>
+      {
+        isLoading && <div>Loading...</div>
+      }
+
+      {error && 'status' in error && (
+        <ErrorMessage errMsg={'error' in error ? error.error : JSON.stringify(error.data)} />
+      )}
+
+
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
