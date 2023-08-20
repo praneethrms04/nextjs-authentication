@@ -9,26 +9,19 @@ export const POST = async (request) => {
     const { email, password } = reqBody;
 
     if (!email || !password) {
-      return NextResponse.json(
-        { message: "please provide email || password" },
-        { status: 400 }
-      );
+      return NextResponse.json("please provide email || password", {
+        status: 400,
+      });
     }
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json(
-        { message: "User does not exist" },
-        { status: 400 }
-      );
+      return NextResponse.json("User does not exist", { status: 400 });
     }
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {
-      return NextResponse.json(
-        { message: "Invalid Password" },
-        { status: 400 }
-      );
+      return NextResponse.json("Invalid Password", { status: 400 });
     }
 
     if (user && validPassword) {
@@ -38,17 +31,12 @@ export const POST = async (request) => {
         { expiresIn: "15d" }
       );
 
+      // without password
       const userObj = Object.assign({}, user.toObject());
       delete userObj.password;
       userObj.token = accesstoken;
-      return NextResponse.json(
-        {
-          message: "Login success",
-          success: true,
-          user: userObj,
-        },
-        { status: 200 }
-      );
+
+      return NextResponse.json({ user: userObj }, { status: 200 });
     }
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 500 });

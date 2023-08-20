@@ -32,7 +32,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     await newUser.save();
-
+    // withpout password
     const userObj = Object.assign({}, newUser.toObject());
     delete userObj.password;
 

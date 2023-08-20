@@ -1,30 +1,50 @@
 "use client";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import React, { useState } from "react";
-import { useGetUsersQuery } from "@/redux/features/authSlice";
+import { toast } from 'react-toastify'
+import { useUserLoginMutation } from "@/redux/services/authSlice";
+import ErrorMessage from "../components/ErrorMessage";
 
 const Login = () => {
+
   const router = useRouter();
-
-  const { data, isLoading, isError, isSuccess, isFetching } = useGetUsersQuery();
-
-  const users = data.users || null
-  console.log(users)
-
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
 
-  const onLoginhandler = (e: any) => {
+  const [loginUser, { error, isLoading, isSuccess, isError, data }] = useUserLoginMutation()
+
+  const onLoginhandler = async (e: any) => {
     e.preventDefault();
-    router.push("/profile");
-    console.log(user);
+    const userData = JSON.stringify(user)
+    await loginUser(userData)
   };
+
+  if (isSuccess && data) {
+    const token = data.user.token
+    localStorage.setItem('token', token)
+    localStorage.setItem('id', data.user._id)
+
+    router.push('/profile')
+    toast.success("you have successfully Login..!", {
+      position: toast.POSITION.TOP_CENTER
+    })
+  }
+
 
   return (
     <>
+      {
+        isLoading && <p>Loading....</p>
+      }
+
+      {
+        error && 'status' in error && (
+          <ErrorMessage errMsg={'error' in error ? error.error : JSON.stringify(error.data)} />
+        )
+      }
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">

@@ -1,4 +1,3 @@
-import { Pokemon } from "@/types/type";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authSlice = createApi({
@@ -9,7 +8,7 @@ export const authSlice = createApi({
     return {
       getUsers: builder.query<any, void>({
         query: () => ({
-          url: "/api/users",
+          url: "api/users",
           method: "GET",
         }),
         providesTags: ["user"],
@@ -22,8 +21,17 @@ export const authSlice = createApi({
         }),
         invalidatesTags: ["user"],
       }),
+      userLogin: builder.mutation({
+        query: (userData) => ({
+          url: "api/auth/login",
+          method: "POST",
+          body: userData,
+        }),
+        invalidatesTags: ["user"],
+      }),
     };
   },
 });
 
-export const { useGetUsersQuery, useAddUserMutation } = authSlice;
+export const { useGetUsersQuery, useAddUserMutation, useUserLoginMutation } =
+  authSlice;

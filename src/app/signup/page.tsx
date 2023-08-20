@@ -1,15 +1,15 @@
 "use client";
-import { useAddUserMutation } from "@/redux/features/authSlice";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { data } from "autoprefixer";
+import { useAddUserMutation } from "@/redux/services/authSlice";
 import Link from "next/link";
 import React, { useState } from "react";
+import { toast } from 'react-toastify'
 import ErrorMessage from "../components/ErrorMessage";
+import { useRouter } from "next/navigation";
 
 
 
 const SignUp = () => {
-
+  const router = useRouter()
   const [user, setuser] = useState({
     username: '',
     email: '',
@@ -18,21 +18,32 @@ const SignUp = () => {
 
   const [adduser, { error, isLoading, isSuccess, isError, data }] = useAddUserMutation()
 
-
   const onRegisterhandler = async (e: any) => {
     e.preventDefault()
     const userData = JSON.stringify(user)
-
     console.log(isLoading) //true
     console.log(isSuccess) // false
     console.log(isError) // false
-    console.log(data)
+    console.log(adduser)
     return await adduser(userData)
   }
 
+  if (isSuccess) {
+    toast.success('You have successfully registered..!', {
+      position: toast.POSITION.TOP_CENTER
+    })
+    router.push('/login')
+  }
 
+  // if (error) {
+  //   if ('status' in error) {
+  //     const errMsg = 'error' in error ? error.error : JSON.stringify(error.data)
+  //     toast.error(errMsg, {
+  //       position: toast.POSITION.TOP_CENTER
+  //     })
 
-
+  //   }
+  // }
   return (
     <>
       {
@@ -42,7 +53,6 @@ const SignUp = () => {
       {error && 'status' in error && (
         <ErrorMessage errMsg={'error' in error ? error.error : JSON.stringify(error.data)} />
       )}
-
 
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
