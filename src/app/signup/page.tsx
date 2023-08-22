@@ -24,7 +24,6 @@ const SignUp = () => {
     console.log(isLoading) //true
     console.log(isSuccess) // false
     console.log(isError) // false
-    console.log(adduser)
     return await adduser(userData)
   }
 

@@ -26,7 +26,6 @@ const Login = () => {
     const token = data.user.token
     localStorage.setItem('token', token)
     localStorage.setItem('id', data.user._id)
-
     router.push('/profile')
     toast.success("you have successfully Login..!", {
       position: toast.POSITION.TOP_CENTER

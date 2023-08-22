@@ -2,6 +2,9 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
+import connectMongoDB from "@/config/dbConnection";
+
+connectMongoDB();
 
 export const POST = async (request) => {
   try {
