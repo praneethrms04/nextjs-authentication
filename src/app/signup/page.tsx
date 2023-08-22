@@ -16,14 +16,14 @@ const SignUp = () => {
     password: ''
   })
 
-  const [adduser, { error, isLoading, isSuccess, isError, data }] = useAddUserMutation()
+  const [adduser, { error, isLoading, isSuccess, isError }] = useAddUserMutation()
 
   const onRegisterhandler = async (e: any) => {
     e.preventDefault()
     const userData = JSON.stringify(user)
-    console.log(isLoading) //true
-    console.log(isSuccess) // false
-    console.log(isError) // false
+    // console.log(isLoading) //true
+    // console.log(isSuccess) // false
+    // console.log(isError) // false
     return await adduser(userData)
   }
 

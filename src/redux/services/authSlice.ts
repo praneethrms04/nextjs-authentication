@@ -13,6 +13,13 @@ export const authSlice = createApi({
         }),
         providesTags: ["user"],
       }),
+      getUserById: builder.query({
+        query: (id) => ({
+          url: `api/users/${id}`,
+          method: "GET",
+        }),
+        providesTags: ["user"],
+      }),
       addUser: builder.mutation({
         query: (userData) => ({
           url: "api/auth/signup",
@@ -33,5 +40,9 @@ export const authSlice = createApi({
   },
 });
 
-export const { useGetUsersQuery, useAddUserMutation, useUserLoginMutation } =
-  authSlice;
+export const {
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  useAddUserMutation,
+  useUserLoginMutation,
+} = authSlice;
